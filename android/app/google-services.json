@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1098338880355",
+    "project_id": "malai-sodhnus-ask-anything",
+    "storage_bucket": "malai-sodhnus-ask-anything.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1098338880355:android:0104ce708066a4400fe156",
+        "android_client_info": {
+          "package_name": "com.example.first_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1098338880355-05je301lqmsbnfuh4b4r0f8h287abaur.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUY7bAPeAvro_UleZ2JO8UIZDpay2kf0Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1098338880355-05je301lqmsbnfuh4b4r0f8h287abaur.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

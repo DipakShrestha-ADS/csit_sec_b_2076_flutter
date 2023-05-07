@@ -1,11 +1,17 @@
 import 'dart:math' as math;
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:first_project/firebase_options.dart';
 import 'package:first_project/get/counter_get.dart';
 import 'package:first_project/get/http_get_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(MyApp());
 }
 

@@ -1,15 +1,15 @@
 import 'dart:math' as math;
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:first_project/firebase/screens/login_page.dart';
 import 'package:first_project/firebase_options.dart';
 import 'package:first_project/get/counter_get.dart';
-import 'package:first_project/get/http_get_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp(
+  await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(MyApp());
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext ctx) {
     return GetMaterialApp(
-      home: HttpGetScreen(),
+      home: LoginPage(),
     );
   }
 }

@@ -1,11 +1,17 @@
 import 'dart:math' as math;
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:first_project/firebase/controllers/firebase_auth_controller.dart';
+import 'package:first_project/firebase/controllers/splash_controller.dart';
 import 'package:first_project/firebase/screens/login_page.dart';
+import 'package:first_project/firebase/screens/register_page.dart';
 import 'package:first_project/firebase_options.dart';
 import 'package:first_project/get/counter_get.dart';
+import 'package:first_project/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import 'firebase/controllers/register_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,8 +25,25 @@ class MyApp extends StatelessWidget {
   final CounterGet cg = Get.put(CounterGet());
   @override
   Widget build(BuildContext ctx) {
+    Get.put(SplashController());
+    Get.put(RegisterController());
+    Get.put(FirebaseAuthController());
     return GetMaterialApp(
-      home: LoginPage(),
+      routes: {
+        '/': (ctx) {
+          return SplashScreen();
+        },
+        '/home': (ctx) {
+          return HomePage();
+        },
+        '/login': (ctx) {
+          return LoginPage();
+        },
+        '/register': (ctx) {
+          return RegisterPage();
+        },
+      },
+      initialRoute: '/',
     );
   }
 }
@@ -50,28 +73,16 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     print('build method called');
     final size = MediaQuery.of(context).size;
+    final fac = Get.find<FirebaseAuthController>();
     return Scaffold(
       body: Container(
         height: size.height,
         width: size.width,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            AnimatedPositioned(
-              duration: const Duration(
-                seconds: 3,
-              ),
-              top: 300,
-              // bottom: ,
-              left: 200,
-              // right: ,
-              child: Container(
-                color: Colors.red,
-                width: 50,
-                height: 50,
-              ),
-            ),
-          ],
+        child: Center(
+          child: OutlinedButton(
+            onPressed: fac.logout,
+            child: Text('Logout'),
+          ),
         ),
       ),
     );

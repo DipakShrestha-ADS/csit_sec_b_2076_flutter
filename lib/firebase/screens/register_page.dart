@@ -274,10 +274,19 @@ class _RegisterPageState extends State<RegisterPage> {
               SizedBox(
                 height: 10,
               ),
-              ElevatedButton(
-                onPressed: fc.onPressedRegister,
-                child: const Text('Register'),
-              ),
+              Obx(() {
+                return ElevatedButton(
+                  onPressed: fc.registerLoading.value ? null : fc.onPressedRegister,
+                  child: fc.registerLoading.value
+                      ? Container(
+                          padding: EdgeInsets.all(10),
+                          height: 50,
+                          width: 50,
+                          child: const CircularProgressIndicator(),
+                        )
+                      : const Text('Register'),
+                );
+              }),
               SizedBox(
                 height: 20,
               )

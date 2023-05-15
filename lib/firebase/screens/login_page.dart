@@ -1,5 +1,5 @@
 import 'package:first_project/firebase/controllers/firebase_auth_controller.dart';
-import 'package:first_project/firebase/controllers/register_controller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,8 +8,7 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(RegisterController());
-    final fc = Get.put(FirebaseAuthController());
+    final fc = Get.find<FirebaseAuthController>();
     return Scaffold(
       body: SingleChildScrollView(
         child: Form(
@@ -109,10 +108,12 @@ class LoginPage extends StatelessWidget {
                   const SizedBox(
                     width: 20,
                   ),
-                  ElevatedButton(
-                    onPressed: fc.onPressedLogin,
-                    child: const Text('Login'),
-                  ),
+                  Obx(() {
+                    return OutlinedButton(
+                      onPressed: fc.loginLoading.value ? null : fc.onPressedLogin,
+                      child: fc.loginLoading.value ? CupertinoActivityIndicator() : const Text('Login'),
+                    );
+                  }),
                   const SizedBox(
                     width: 40,
                   ),

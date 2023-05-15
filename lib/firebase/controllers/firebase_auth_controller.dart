@@ -1,7 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first_project/firebase/controllers/register_controller.dart';
-import 'package:first_project/firebase/screens/login_page.dart';
-import 'package:first_project/firebase/screens/register_page.dart';
+import 'package:first_project/firebase/controllers/splash_controller.dart';
 import 'package:first_project/firebase/services/firebase_auth_service.dart';
+import 'package:first_project/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,6 +13,9 @@ class FirebaseAuthController extends GetxController {
   final formKey = GlobalKey<FormState>();
   final fas = FirebaseAuthService();
   final rc = Get.find<RegisterController>();
+  var registerLoading = false.obs;
+  var loginLoading = false.obs;
+  final sc = Get.find<SplashController>();
 
   @override
   void onClose() {
@@ -45,10 +49,36 @@ class FirebaseAuthController extends GetxController {
   Future<void> onPressedLogin() async {
     formKey.currentState!.save();
     if (formKey.currentState!.validate()) {
-      await fas.login(
-        email: emailController.text,
-        password: passwordController.text,
-      );
+      loginLoading.value = true;
+      try {
+        final res = await fas.login(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+        final token = await res.user!.getIdToken();
+        print('token: $token');
+        sc.spInstance.setString('p_token', token);
+        Get.snackbar(
+          'Login',
+          'LoginSuccess',
+        );
+        Get.to(() {
+          return HomePage();
+        });
+      } on FirebaseAuthException catch (e) {
+        debugPrint('auth ex: ${e.message}');
+        Get.snackbar(
+          'Exception:',
+          '${e.message}',
+        );
+      } catch (e) {
+        debugPrint('auth ex: $e');
+        Get.snackbar(
+          'Exception:',
+          '$e',
+        );
+      }
+      loginLoading.value = false;
     }
   }
 
@@ -60,23 +90,46 @@ class FirebaseAuthController extends GetxController {
       final password = rc.passwordController.text;
       final age = rc.ageController.text;
       final phoneNumber = rc.phoneController.text;
-      await fas.createUser(
-        email: email,
-        password: password,
-      );
+      registerLoading.value = true;
+      try {
+        await fas.createUser(
+          email: email,
+          password: password,
+        );
+        Get.snackbar(
+          'Success',
+          'Register Successfull.',
+        );
+        Get.back();
+      } catch (e) {
+        debugPrint('error auth: $e');
+        Get.snackbar(
+          'Error Message',
+          'Something went wrong!',
+        );
+      }
+      registerLoading.value = false;
     }
   }
 
   void goToLogin() {
-    Get.to(() {
-      return LoginPage();
-    });
+    Get.toNamed('/login');
   }
 
   void goToRegister() {
-    Get.to(() {
-      return RegisterPage();
-    });
+    Get.toNamed('/register');
+  }
+
+  void logout() async {
+    await sc.spInstance.remove('p_token');
+    await fas.logout();
+    Get.offAllNamed(
+      '/login',
+      predicate: (r) {
+        final routeName = r.settings.name;
+        return false;
+      },
+    );
   }
 
   void onPressedGoogleSignIn() {}

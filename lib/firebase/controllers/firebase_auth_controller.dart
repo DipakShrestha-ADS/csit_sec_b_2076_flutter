@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first_project/firebase/controllers/register_controller.dart';
 import 'package:first_project/firebase/controllers/splash_controller.dart';
+import 'package:first_project/firebase/models/user_model.dart';
 import 'package:first_project/firebase/services/firebase_auth_service.dart';
+import 'package:first_project/firebase/services/firestore_services.dart';
 import 'package:first_project/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,6 +18,7 @@ class FirebaseAuthController extends GetxController {
   var registerLoading = false.obs;
   var loginLoading = false.obs;
   final sc = Get.find<SplashController>();
+  final firestoreServices = FirestoreServices();
 
   @override
   void onClose() {
@@ -96,6 +99,13 @@ class FirebaseAuthController extends GetxController {
           email: email,
           password: password,
         );
+        UserModel um = UserModel(
+          email: email,
+          fullName: fullName,
+          age: int.parse(age),
+          phoneNumber: int.tryParse(phoneNumber),
+        );
+        await firestoreServices.createUser(um);
         Get.snackbar(
           'Success',
           'Register Successfull.',
